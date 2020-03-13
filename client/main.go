@@ -13,11 +13,13 @@ import (
 )
 
 type Message struct {
-	Text string `json:"text"`
+	Text string    `json:"text"`
+	Time time.Time `json:"time"`
 }
 
 var (
-	port = flag.String("port", "9000", "port used for ws connection")
+	port   = flag.String("port", "9000", "port used for ws connection")
+	layout = "Mon, 02 Jan 15:04:05 IST"
 )
 
 func connect() (*websocket.Conn, error) {
@@ -50,7 +52,7 @@ func main() {
 				fmt.Println("Error receiving message: ", err.Error())
 				break
 			}
-			fmt.Println("Message: ", m)
+			fmt.Println("Message: ", m.Time.Format(layout), m.Text)
 		}
 	}()
 	// send
@@ -62,6 +64,7 @@ func main() {
 		}
 		m := Message{
 			Text: text,
+			Time: time.Now(),
 		}
 		err = websocket.JSON.Send(ws, m)
 		if err != nil {

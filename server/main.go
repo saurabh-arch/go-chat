@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"golang.org/x/net/websocket"
 )
 
 // Message struct to hold incoming/outgoing messages
 type Message struct {
-	Text string `json:"text"`
+	Text string    `json:"text"`
+	Time time.Time `json:"time"`
 }
 
 type hub struct {
@@ -57,7 +59,7 @@ func handler(ws *websocket.Conn, h *hub) {
 		var m Message
 		err := websocket.JSON.Receive(ws, &m)
 		if err != nil {
-			h.broadcastChan <- Message{err.Error()}
+			h.broadcastChan <- Message{err.Error(), time.Now()}
 			h.removeClient(ws)
 			return
 		}
