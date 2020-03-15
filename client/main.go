@@ -12,9 +12,16 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+// Message struct to hold message related data
 type Message struct {
 	Text string    `json:"text"`
 	Time time.Time `json:"time"`
+}
+
+// Client struct to hold client related data
+type Client struct {
+	IP   string `json:"ip"`
+	Port string `json:"port"`
 }
 
 var (
@@ -35,6 +42,13 @@ func mockedIP() string {
 	}
 	return fmt.Sprintf("http://%d.%d.%d.%d", arr[0], arr[1], arr[2], arr[3])
 }
+
+// Register method to register client to server
+func (c *Client) Register(serverAddr string, clientAddr string) (bool, error) {
+
+	return true, nil
+}
+
 func main() {
 	flag.Parse()
 	// connect
